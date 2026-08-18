@@ -64,9 +64,14 @@
   <ItemGroup>
     <Compile Include="Identity\ApplicationUser.cs" />
     <Compile Include="Identity\IdentitySeeder.cs" />
+    <Compile Include="Migrations\202608182223214_Initial.cs" />
+    <Compile Include="Migrations\202608182223214_Initial.Designer.cs">
+      <DependentUpon>202608182223214_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Persistence\Configurations\CustomerConfiguration.cs" />
     <Compile Include="Persistence\Configurations\OrderConfiguration.cs" />
     <Compile Include="Persistence\Context\AppDbContext.cs" />
+    <Compile Include="Persistence\Migrations\Configuration.cs" />
     <Compile Include="Persistence\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
@@ -89,6 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logging\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202608182223214_Initial.resx">
+      <DependentUpon>202608182223214_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
