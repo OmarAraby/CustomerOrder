@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CustomerOrder.Api/CustomerOrder.Api.csproj" Id="4df78d08-d7a6-46c6-828c-39bd324be9c7" />
+    <Project Path="src/CustomerOrder.Application/CustomerOrder.Application.csproj" Id="4baceff5-7cfd-45f2-b2c3-887997dc8530" />
+    <Project Path="src/CustomerOrder.Core/CustomerOrder.Core.csproj" Id="d3074c5d-55b5-440b-9323-b899af673cd6" />
+    <Project Path="src/CustomerOrder.Infrastructure/CustomerOrder.Infrastructure.csproj" Id="c590febc-645e-41d1-9184-630bb052f9a8" />
+  </Folder>
+</Solution>
