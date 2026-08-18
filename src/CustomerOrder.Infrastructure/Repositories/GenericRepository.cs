@@ -30,7 +30,7 @@ namespace CustomerOrder.Infrastructure.Repositories
             Context = context;
         }
 
-        public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return Entities.FindAsync(cancellationToken, id);
         }
