@@ -1,4 +1,5 @@
-﻿using CustomerOrder.Application.Common;
+﻿using CustomerOrder.Api.Filters;
+using CustomerOrder.Application.Common;
 using CustomerOrder.Application.Dtos.Customers;
 using CustomerOrder.Application.Interfaces;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace CustomerOrder.Api.Controllers
                 customer, "Customer retrieved successfully"));
         }
 
-        [Authorize(Roles = "admin")]
+        [ApiAuthorize(Roles = "admin")]
         [HttpPost]
         [Route("")]
         public async Task<IHttpActionResult> Create(CreateCustomerDto request, CancellationToken cancellationToken)
@@ -50,7 +51,7 @@ namespace CustomerOrder.Api.Controllers
                 ApiResponse<CustomerDto>.SuccessResponse(customer, "Customer created successfully"));
         }
 
-        [Authorize(Roles = "admin")]
+        [ApiAuthorize(Roles = "admin")]
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IHttpActionResult> Update(int id, UpdateCustomerDto request, CancellationToken cancellationToken)
@@ -60,7 +61,7 @@ namespace CustomerOrder.Api.Controllers
             return Ok(ApiResponse.SuccessResponse("Customer updated successfully"));
         }
 
-        [Authorize(Roles = "admin")]
+        [ApiAuthorize(Roles = "admin")]
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IHttpActionResult> Delete(int id, CancellationToken cancellationToken)

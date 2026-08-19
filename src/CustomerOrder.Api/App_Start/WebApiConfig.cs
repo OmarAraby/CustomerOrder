@@ -1,4 +1,4 @@
-using CustomerOrder.Api.ErrorHandling;
+﻿using CustomerOrder.Api.ErrorHandling;
 using CustomerOrder.Api.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -20,7 +20,7 @@ namespace CustomerOrder.Api
             config.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler());  // don't for get replace instead of add 
 
             // idenity auth
-            config.Filters.Add(new AuthorizeAttribute());
+            config.Filters.Add(new ApiAuthorizeAttribute());
 
             config.Filters.Add(new ValidateModelAttribute());
 

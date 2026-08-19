@@ -159,6 +159,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="ErrorHandling\GlobalExceptionHandler.cs" />
+    <Compile Include="Filters\ApiAuthorizeAttribute.cs" />
     <Compile Include="Filters\ValidateModelAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
