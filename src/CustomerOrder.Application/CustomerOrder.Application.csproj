@@ -45,12 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ApiResponse.cs" />
+    <Compile Include="Dtos\Auth\AuthenticatedUser.cs" />
+    <Compile Include="Dtos\Auth\LoginDto.cs" />
+    <Compile Include="Dtos\Auth\TokenDto.cs" />
     <Compile Include="Dtos\Customers\CreateCustomerDto.cs" />
     <Compile Include="Dtos\Customers\CustomerDetailsDto.cs" />
     <Compile Include="Dtos\Customers\CustomerDto.cs" />
     <Compile Include="Dtos\Customers\UpdateCustomerDto.cs" />
     <Compile Include="Dtos\Orders\OrderSummaryDto.cs" />
+    <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICustomerService.cs" />
+    <Compile Include="Interfaces\IIdentityService.cs" />
+    <Compile Include="Interfaces\IJwtTokenGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CustomerService.cs" />
   </ItemGroup>
@@ -61,7 +67,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dtos\Auth\" />
     <Folder Include="Validators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

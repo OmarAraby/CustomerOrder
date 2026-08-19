@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Identity\ApplicationUser.cs" />
     <Compile Include="Identity\IdentitySeeder.cs" />
+    <Compile Include="Identity\IdentityService.cs" />
+    <Compile Include="Identity\JwtTokenGenerator.cs" />
     <Compile Include="Migrations\202608182223214_Initial.cs" />
     <Compile Include="Migrations\202608182223214_Initial.Designer.cs">
       <DependentUpon>202608182223214_Initial.cs</DependentUpon>
