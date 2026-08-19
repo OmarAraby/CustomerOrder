@@ -1,11 +1,13 @@
-﻿using System.Reflection;
-using System.Web.Http;
-using Autofac;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
+using CustomerOrder.Application.Interfaces;
+using CustomerOrder.Application.Services;
 using CustomerOrder.Core.Interfaces;
 using CustomerOrder.Infrastructure.Persistence;
 using CustomerOrder.Infrastructure.Persistence.Context;
 using CustomerOrder.Infrastructure.Repositories;
+using System.Reflection;
+using System.Web.Http;
 
 namespace CustomerOrder.Api
 {
@@ -42,7 +44,9 @@ namespace CustomerOrder.Api
                    .InstancePerRequest();
 
             // --- Application services
-
+            builder.RegisterType<CustomerService>()
+                   .As<ICustomerService>()
+                   .InstancePerRequest();
 
 
             // --- Identity + JWT

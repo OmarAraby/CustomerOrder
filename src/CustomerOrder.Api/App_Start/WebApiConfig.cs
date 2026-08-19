@@ -1,7 +1,10 @@
-using System.Web.Http;
+using CustomerOrder.Api.ErrorHandling;
+using CustomerOrder.Api.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 
 namespace CustomerOrder.Api
 {
@@ -13,6 +16,10 @@ namespace CustomerOrder.Api
         {
             // DI first - everything after this can rely on the resolver being in place.
             AutofacConfig.Register(config);
+
+            config.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler());  // don't for get replace instead of add 
+
+            config.Filters.Add(new ValidateModelAttribute());
 
             // Enables [Route] / [RoutePrefix]. Needed for the nested
             // /api/orders/{id}/customers/{customerId} endpoints 
