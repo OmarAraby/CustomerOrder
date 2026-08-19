@@ -40,6 +40,9 @@ namespace CustomerOrder.Api.ErrorHandling
                     return HttpStatusCode.NotFound;
                 case ConflictException _:
                     return HttpStatusCode.Conflict;
+                case UnauthorizedException _:
+                    return HttpStatusCode.Unauthorized;
+
                 default:
                     return HttpStatusCode.InternalServerError;
             }

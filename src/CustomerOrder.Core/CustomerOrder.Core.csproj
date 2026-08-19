@@ -49,6 +49,7 @@
     <Compile Include="Exceptions\DomainException.cs" />
     <Compile Include="Exceptions\InputValidationException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
+    <Compile Include="Exceptions\UnauthorizedException.cs" />
     <Compile Include="Interfaces\ICustomerRepository.cs" />
     <Compile Include="Interfaces\IGenericRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
