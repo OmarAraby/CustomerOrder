@@ -44,6 +44,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ApiResponse.cs" />
+    <Compile Include="Dtos\Customers\CreateCustomerDto.cs" />
+    <Compile Include="Dtos\Customers\CustomerDetailsDto.cs" />
+    <Compile Include="Dtos\Customers\CustomerDto.cs" />
+    <Compile Include="Dtos\Customers\UpdateCustomerDto.cs" />
+    <Compile Include="Dtos\Orders\OrderSummaryDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,8 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dtos\Auth\" />
-    <Folder Include="Dtos\Customers\" />
-    <Folder Include="Dtos\Orders\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Mapping\" />
     <Folder Include="Services\" />
