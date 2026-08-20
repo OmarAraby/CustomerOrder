@@ -23,6 +23,7 @@ namespace CustomerOrder.Api
             config.Filters.Add(new ApiAuthorizeAttribute());
 
             config.Filters.Add(new ValidateModelAttribute());
+            config.Filters.Add(new ValidateFluentAttribute());
 
             // Enables [Route] / [RoutePrefix]. Needed for the nested
             // /api/orders/{id}/customers/{customerId} endpoints 

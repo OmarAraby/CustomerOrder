@@ -2,11 +2,13 @@
 using Autofac.Integration.WebApi;
 using CustomerOrder.Application.Interfaces;
 using CustomerOrder.Application.Services;
+using CustomerOrder.Application.Validators;
 using CustomerOrder.Core.Interfaces;
 using CustomerOrder.Infrastructure.Identity;
 using CustomerOrder.Infrastructure.Persistence;
 using CustomerOrder.Infrastructure.Persistence.Context;
 using CustomerOrder.Infrastructure.Repositories;
+using FluentValidation;
 using System.Reflection;
 using System.Web.Http;
 
@@ -49,6 +51,10 @@ namespace CustomerOrder.Api
                    .As<ICustomerService>()
                    .InstancePerRequest();
 
+            builder.RegisterType<OrderService>()
+                .As<IOrderService>()
+                .InstancePerRequest();
+
 
             // --- Identity + JWT
 
@@ -63,6 +69,16 @@ namespace CustomerOrder.Api
             builder.RegisterType<AuthService>()
                    .As<IAuthService>()
                    .InstancePerRequest();
+
+            // -- fluentvalidation 
+
+            builder.RegisterAssemblyTypes(typeof(CreateOrderDtoValidator).Assembly)
+                   .AsClosedTypesOf(typeof(IValidator<>))
+                   .SingleInstance();
+
+            builder.RegisterAssemblyTypes(typeof(UpdateOrderDtoValidator).Assembly)
+                  .AsClosedTypesOf(typeof(IValidator<>))
+                  .SingleInstance();
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(builder.Build());
         }
