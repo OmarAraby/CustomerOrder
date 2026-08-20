@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using System.Web.Hosting;
 
-namespace CustomerOrder.Api.App_Start
+namespace CustomerOrder.Api
 {
     public static class LoggingConfig
     {
