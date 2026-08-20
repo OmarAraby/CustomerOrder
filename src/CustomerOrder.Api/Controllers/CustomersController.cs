@@ -19,6 +19,7 @@ namespace CustomerOrder.Api.Controllers
             _customerService = customerService;
         }
 
+        [ApiAuthorize(Roles = "admin")]
         [HttpGet]
         [Route("")]
         public async Task<IHttpActionResult> GetAll(CancellationToken cancellationToken)

@@ -1,0 +1,231 @@
+{
+  "info": {
+    "name": "CustomerOrder API",
+    "description": "Customers & Orders Web API (.NET Framework 4.8 / Web API 2).\n\nOne request per endpoint — 11 in total.\n\n**Run `Auth → Login` first.** Its test script stores the JWT in the `token` collection variable and every other request inherits it.\n\nTo see role-based authorization, change the login body to `user` / `User123` and retry an admin-only request — it must answer **403**, not 401.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://localhost:44395", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "customerId", "value": "1", "type": "string" },
+    { "key": "orderId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });",
+                  "",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('token returned', function () {",
+                  "    pm.expect(body.success).to.eql(true);",
+                  "    pm.expect(body.data.accessToken).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('token', body.data.accessToken);",
+                  "console.log('Token stored for ' + body.data.userName);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"admin\",\n  \"password\": \"Admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
+            "description": "Anonymous. Returns a JWT valid for 60 minutes; the test script stores it in `{{token}}`.\n\nSeeded accounts:\n\n| Username | Password | Role |\n|---|---|---|\n| `admin` | `Admin123` | admin |\n| `user` | `User123` | user |\n\nWrong credentials return **401** with the message `Invalid username or password.` — the same message for an unknown username, to prevent user enumeration."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get all customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/customers", "host": ["{{baseUrl}}"], "path": ["api", "customers"] },
+            "description": "Role: **admin** only.\n\nListing every customer exposes the whole PII set at once, so it is restricted to admins. A `user` token returns **403**."
+          }
+        },
+        {
+          "name": "Get customer by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            },
+            "description": "Roles: `user`, `admin`.\n\nIncludes the customer's order summaries. Unknown id → **404**. A non-numeric id → **404** from the `{id:int}` route constraint."
+          }
+        },
+        {
+          "name": "Create customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', function () { pm.response.to.have.status(201); });",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('customerId', body.data.id);",
+                  "console.log('customerId = ' + body.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Omar\",\n  \"lastName\": \"Araby\",\n  \"address\": \"12 Tahrir Street, Cairo\",\n  \"email\": \"omar.araby@example.com\",\n  \"phone\": \"01001234567\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/customers", "host": ["{{baseUrl}}"], "path": ["api", "customers"] },
+            "description": "Role: **admin**. Validated with **Data Annotations**. Stores the new id in `{{customerId}}`.\n\n- Duplicate email → **409**\n- Any field breaking a rule → **400**, with one entry per failure in `errors`. Try `\"email\": \"not-an-email\"` or `\"firstName\": \"O\"`."
+          }
+        },
+        {
+          "name": "Update customer",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Omar\",\n  \"lastName\": \"Ibrahim\",\n  \"address\": \"14 Tahrir Street, Cairo\",\n  \"email\": \"omar.araby@example.com\",\n  \"phone\": \"01001234567\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            },
+            "description": "Role: **admin**. Full replacement of the customer's fields.\n\nKeeping the same email is fine — the uniqueness check excludes the customer being updated."
+          }
+        },
+        {
+          "name": "Delete customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            },
+            "description": "Role: **admin**.\n\nRejected with **409** if it would leave one of the customer's orders with no customers — the order side of total participation."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get all orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/orders", "host": ["{{baseUrl}}"], "path": ["api", "orders"] },
+            "description": "Roles: `user`, `admin`. Flat order projections without the linked customers."
+          }
+        },
+        {
+          "name": "Get order by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Roles: `user`, `admin`. Includes the linked customers."
+          }
+        },
+        {
+          "name": "Create order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', function () { pm.response.to.have.status(201); });",
+                  "",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('orderId', body.data.id);",
+                  "console.log('orderId = ' + body.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderNumber\": \"ORD-000101\",\n  \"orderDate\": \"2026-08-01T10:00:00Z\",\n  \"totalAmount\": 1250.75,\n  \"status\": \"Pending\",\n  \"customerIds\": [{{customerId}}]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/orders", "host": ["{{baseUrl}}"], "path": ["api", "orders"] },
+            "description": "Roles: `user`, `admin`. Validated with **FluentValidation**. Run **Create customer** first so `{{customerId}}` is set. Stores the new id in `{{orderId}}`.\n\n`status` accepts the name (`Pending`, `Paid`, `Shipped`, `Delivered`, `Cancelled`) or the number.\n\nThings that return **400**: `orderNumber` not matching `ORD-000000`, `totalAmount` ≤ 0, a future `orderDate`, an empty or repeated `customerIds`.\nA `customerIds` entry that does not exist → **404**. A duplicate `orderNumber` → **409**."
+          }
+        },
+        {
+          "name": "Update order",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderNumber\": \"ORD-000101\",\n  \"orderDate\": \"2026-08-01T10:00:00Z\",\n  \"totalAmount\": 1400.00,\n  \"status\": \"Paid\",\n  \"customerIds\": [{{customerId}}]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Roles: `user`, `admin`.\n\n`customerIds` **replaces** the linked set — ids left out get unlinked, new ids get linked. This is how the many-to-many is managed; there are no separate link/unlink endpoints.\n\nAn empty `customerIds` → **400**, because an order must always keep at least one customer."
+          }
+        },
+        {
+          "name": "Delete order",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Role: **admin**.\n\nLog in as `user` / `User123` and send this to verify role-based authorization — it must return **403**, not 401."
+          }
+        }
+      ]
+    }
+  ]
+}
