@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,8 +12,14 @@ namespace CustomerOrder.Api.Handlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
+            var correlationId = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+            // Stashed so the GlobalExceptionHandler can surface it as a traceId in M8.
+            request.Properties["CorrelationId"] = correlationId;
+
             Log.Information(
-                "Request: {Method} {Url}",
+                "Request: {CorrelationId} {Method} {Url}",
+                correlationId,
                 request.Method,
                 request.RequestUri);
 
@@ -21,13 +28,15 @@ namespace CustomerOrder.Api.Handlers
             if (response.IsSuccessStatusCode)
             {
                 Log.Information(
-                    "Success Response: {StatusCode}",
+                    "Success Response: {CorrelationId} {StatusCode}",
+                    correlationId,
                     response.StatusCode);
             }
             else
             {
                 Log.Error(
-                    "Failed Response: {StatusCode}",
+                    "Failed Response: {CorrelationId} {StatusCode}",
+                    correlationId,
                     response.StatusCode);
             }
 

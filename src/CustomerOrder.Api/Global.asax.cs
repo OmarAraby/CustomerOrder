@@ -1,3 +1,4 @@
+﻿using Serilog;
 using System.Web;
 using System.Web.Http;
 
@@ -12,6 +13,11 @@ namespace CustomerOrder.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);  // Register Web API configuration and services
+        }
+
+        protected void Application_End()
+        {
+            Log.CloseAndFlush();
         }
     }
 }

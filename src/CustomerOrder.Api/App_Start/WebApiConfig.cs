@@ -1,5 +1,4 @@
-﻿using CustomerOrder.Api.App_Start;
-using CustomerOrder.Api.ErrorHandling;
+﻿using CustomerOrder.Api.ErrorHandling;
 using CustomerOrder.Api.Filters;
 using CustomerOrder.Api.Handlers;
 using Newtonsoft.Json;
