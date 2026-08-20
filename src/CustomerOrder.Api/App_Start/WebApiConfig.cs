@@ -1,5 +1,7 @@
-﻿using CustomerOrder.Api.ErrorHandling;
+﻿using CustomerOrder.Api.App_Start;
+using CustomerOrder.Api.ErrorHandling;
 using CustomerOrder.Api.Filters;
+using CustomerOrder.Api.Handlers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -14,8 +16,11 @@ namespace CustomerOrder.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            LoggingConfig.Register();
             // DI first - everything after this can rely on the resolver being in place.
             AutofacConfig.Register(config);
+
+            config.MessageHandlers.Add(new RequestLoggingHandler());
 
             config.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler());  // don't for get replace instead of add 
 

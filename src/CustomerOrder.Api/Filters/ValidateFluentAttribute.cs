@@ -10,11 +10,7 @@ using FluentValidation.Results;
 
 namespace CustomerOrder.Api.Filters
 {
-    /// <summary>
-    /// Runs any registered FluentValidation validator for the action's arguments and
-    /// funnels failures into the same InputValidationException the Data Annotations
-    /// filter uses - so every validation source produces one response shape.
-    /// </summary>
+ 
     public class ValidateFluentAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(HttpActionContext actionContext)
