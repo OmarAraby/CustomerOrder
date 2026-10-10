@@ -16,7 +16,7 @@ namespace CustomerOrder.Core.Exceptions
         public InputValidationException(string message)
             : base(message)
         {
-            Errors = NoErrors;
+            Errors = NoErrors;  // if null  is passed, we can use an empty dictionary to avoid null reference exceptions
         }
 
         public IReadOnlyDictionary<string, string[]> Errors { get; }

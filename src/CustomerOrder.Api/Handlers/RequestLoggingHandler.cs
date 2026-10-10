@@ -14,7 +14,7 @@ namespace CustomerOrder.Api.Handlers
         {
             var correlationId = Guid.NewGuid().ToString("N").Substring(0, 8);
 
-            // Stashed so the GlobalExceptionHandler can surface it as a traceId in M8.
+            // Stashed so the GlobalExceptionHandler can surface it as a traceId.
             request.Properties["CorrelationId"] = correlationId;
 
             Log.Information(
